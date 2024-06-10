@@ -1,0 +1,139 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(45deg, #49a09d, #5f2c82);
+    font-family: 'Arial', sans-serif;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin: 0 0 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 0;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #333;
+    background: transparent;
+    outline: none;
+    color: #333;
+}
+
+.input-group label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 16px;
+    color: #333;
+    transition: 0.2s;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label {
+    top: -20px;
+    font-size: 12px;
+    color: #5f2c82;
+}
+
+button {
+    background: #5f2c82;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #49a09d;
+}
+
+.to-reg {
+    margin-top: 20px;
+}
+
+.to-reg a {
+    color: #5f2c82;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.to-reg a:hover {
+    color: #49a09d;
+}
+
+
+.input-group textarea{
+    margin-left: -20%;
+}
+
+.properties-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.properties-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #5f2c82;
+}
+
+.properties-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.property-item {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.property-item h3 {
+    margin-top: 0;
+    color: #5f2c82;
+}
+
+.property-item p {
+    margin: 8px 0;
+}
+
+.property-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
