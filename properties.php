@@ -14,15 +14,29 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
+// Получаем фильтры из запроса
 $type = isset($_GET['type']) ? $_GET['type'] : '';
 $min_price = isset($_GET['min_price']) ? $_GET['min_price'] : '';
 $max_price = isset($_GET['max_price']) ? $_GET['max_price'] : '';
 $bedrooms = isset($_GET['bedrooms']) ? $_GET['bedrooms'] : '';
 $bathrooms = isset($_GET['bathrooms']) ? $_GET['bathrooms'] : '';
 $location = isset($_GET['location']) ? $_GET['location'] : '';
+$keywords = isset($_GET['keywords']) ? $_GET['keywords'] : '';
 
+// Обработка отправки формы заявки на покупку
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['property_id']) && isset($_POST['phone_number'])) {
+    $property_id = (int)$_POST['property_id'];
+    $phone_number = $conn->real_escape_string($_POST['phone_number']);
 
+    $sql_insert = "INSERT INTO purchase_requests (property_id, phone_number) VALUES ('$property_id', '$phone_number')";
+    if ($conn->query($sql_insert) === TRUE) {
+        echo "<script>alert('Ваш запрос успешно отправлен!');</script>";
+    } else {
+        echo "<script>alert('Ошибка при отправке запроса: " . $conn->error . "');</script>";
+    }
+}
+
+// Формируем запрос с учетом фильтров
 $sql = "SELECT * FROM properties WHERE 1=1";
 
 if ($type) {
@@ -43,6 +57,10 @@ if ($bathrooms) {
 if ($location) {
     $sql .= " AND location LIKE '%" . $conn->real_escape_string($location) . "%'";
 }
+if ($keywords) {
+    $keywords = $conn->real_escape_string($keywords);
+    $sql .= " AND (title LIKE '%$keywords%' OR description LIKE '%$keywords%' OR location LIKE '%$keywords%')";
+}
 
 $result = $conn->query($sql);
 ?>
@@ -53,7 +71,7 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Объекты недвижимости</title>
-    <link rel="stylesheet" href="properties.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="properties-container">
@@ -87,6 +105,10 @@ $result = $conn->query($sql);
                 <label for="location">Местоположение:</label>
                 <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($location); ?>">
             </div>
+            <div class="filter-group">
+                <label for="keywords">Ключевые слова:</label>
+                <input type="text" id="keywords" name="keywords" value="<?php echo htmlspecialchars($keywords); ?>">
+            </div>
             <button type="submit">Применить фильтры</button>
         </form>
         <div class="properties-list">
@@ -102,6 +124,14 @@ $result = $conn->query($sql);
                     echo "<p><strong>Количество спален:</strong> " . htmlspecialchars($row['bedrooms']) . "</p>";
                     echo "<p><strong>Количество ванных комнат:</strong> " . htmlspecialchars($row['bathrooms']) . "</p>";
                     echo "<p><strong>Размер:</strong> " . htmlspecialchars($row['size']) . " кв.м</p>";
+                    echo "<form method='POST'>";
+                    echo "<input type='hidden' name='property_id' value='" . $row['id'] . "'>";
+                    echo "<div class='phone-group'>";
+                    echo "<label for='phone_number'>Введите номер телефона:</label>";
+                    echo "<input type='text' name='phone_number' required>";
+                    echo "<button type='submit'>Хочу купить</button>";
+                    echo "</div>";
+                    echo "</form>";
                     echo "</div>";
                 }
             } else {
